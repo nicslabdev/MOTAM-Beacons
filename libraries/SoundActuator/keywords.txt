@@ -1,0 +1,5 @@
+SoundActuator	KEYWORD1
+SoundActuatorBasedOnGroveBuzzer	KEYWORD1
+
+playSound	KEYWORD2
+begin	KEYWORD2

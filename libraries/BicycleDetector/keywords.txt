@@ -1,0 +1,9 @@
+BicycleDetector	KEYWORD1
+BicycleDetectorBasedOn2TiltAndReed	KEYWORD1
+
+getBicycleState	KEYWORD2
+begin	KEYWORD2
+
+ONGOING	LITERAL1
+STOPPED	LITERAL1
+ACCIDENT	LITERAL1

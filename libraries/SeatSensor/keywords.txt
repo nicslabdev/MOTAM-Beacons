@@ -1,0 +1,8 @@
+SeatSensor	KEYWORD1
+SeatSensorBasedOnReedAndFSR	KEYWORD1
+
+getSeatState	KEYWORD2
+begin	KEYWORD2
+
+SAFE	LITERAL1
+NON_SAFE	LITERAL1
