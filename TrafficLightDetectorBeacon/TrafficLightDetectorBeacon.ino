@@ -17,18 +17,20 @@ uint8_t advdata[] =
   // DEphisit BEacon identifier (0xDEBE)
   0xBE,
   0xDE,  
+
   
   // Latitude of the TrafficLightDetectorBeacon, in LE float format (28.481531)
-  0x2D,
-  0xDA,
-  0xE3,
-  0x41,
-  
+  0x45,
+  0xDD,
+  0x12,
+  0x42,
+
+
   // Longitude of the TrafficLightDetectorBeacon, in LE float format (-16.322899)
-  0x4C,
-  0x95,
-  0x82,
-  0xC1,
+  0x5A,
+  0xD7,
+  0x8F,
+  0xC0,
   
   0x01,  // Type of DEphisit BEacon (0x01 -> Traffic Sign Beacon, 0x02 -> Weather Beacon, 0x03 -> Bicycle Beacon)
   
