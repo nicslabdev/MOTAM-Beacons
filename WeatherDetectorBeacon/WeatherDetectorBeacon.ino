@@ -37,7 +37,7 @@ uint8_t advdata[] =
   UNKNOWN  // Default state of the road -> Unknown
 };
 
-WeatherDetectorBasedOnGRainAndGHTPro weatherDetector(2, 6);
+WeatherDetectorBasedOnGRainAndGHTPro weatherDetector(5, 6);
 
 //uint8_t currentState, newState;
   
