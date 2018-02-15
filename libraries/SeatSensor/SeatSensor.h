@@ -8,8 +8,8 @@
 #ifndef SeatSensor_h
 #define SeatSensor_h
 
-#define SAFE		0
-#define NON_SAFE	1
+#define SAFE		1
+#define NON_SAFE	0
 
 class SeatSensor
 {
