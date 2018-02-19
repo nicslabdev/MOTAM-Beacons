@@ -2,17 +2,21 @@
 /*
  * NB-IoT
  * Created by Manuel Montenegro, February 15, 2018.
- * Developed for Manuel Montenegro Bachelor Thesis. 
+ * Developed for MOTAM project. 
  * 
- *  This sketch uses SODAQ NB-IoT Shield for send some data.
+ *  This sketch uses SODAQ NB-IoT Shield for send some data from sensors: temperature and 
+ *  atmospheric pressure.
+ *  
+ *  Compatible boards: Arduino/Genuino 101.
 */
 /*********************************************************************************************/
 
 #include <Wire.h>                   // I2C library
 #include <Sodaq_LPS22HB.h>          // Temperature and pressure sensor's library
+#include <SodaqNBIoTMotam.h>        // Library for doing MOTAM operations with SODAQ NB-IoT
 
 #define USB Serial                  // Serial port for DEBUG
-#define UBLOX Serial1               // Serial port for comunnication with NB-IoT module
+#define UBLOX Serial1               // Serial port for communication with NB-IoT module
 #define powerPin 7                  // Pin to turn on/off the NB-IoT module
 
 #define NIBBLE_TO_HEX_CHAR(i) ((i <= 9) ? ('0' + i) : ('A' - 10 + i))
@@ -49,7 +53,7 @@ void sendPressTemp() {
 
   len = String(data.length()/2);
 
-  message += "AT+NSOST=0,79.114.105.148,16666,";
+  message += "AT+NSOST=0,79.114.88.15,16666,";
   message += len;
   message += ",";
   message += data;
@@ -167,6 +171,7 @@ void setup() {
   
   USB.begin(9600);                  // Start serial port with USB
   UBLOX.begin(9600);                // Start serial port with NB-IoT shield
+  while(!USB);
 
   setUpBarSensor();                 // Set pressure & temperature sensor
   setUpUblox();                     // Set NB-IoT module up
