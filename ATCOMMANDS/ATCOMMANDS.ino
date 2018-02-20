@@ -14,6 +14,8 @@ void setup()
   pinMode(powerPin, OUTPUT); 
   digitalWrite(powerPin, HIGH);  
 
+  delay(100);
+
   // Start communication
   USB.begin(baud);
   UBLOX.begin(baud);
