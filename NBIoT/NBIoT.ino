@@ -13,7 +13,6 @@
 
 #include <Wire.h>                   // I2C library
 #include <Sodaq_LPS22HB.h>          // Temperature and pressure sensor's library
-#include <SodaqNBIoTMotam.h>        // Library for doing MOTAM operations with SODAQ NB-IoT
 
 #define USB Serial                  // Serial port for DEBUG
 #define UBLOX Serial1               // Serial port for communication with NB-IoT module
