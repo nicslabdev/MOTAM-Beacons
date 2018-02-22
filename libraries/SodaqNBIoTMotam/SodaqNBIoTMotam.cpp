@@ -61,7 +61,7 @@ int SodaqNBIoT::openSocket (int port) {
 	Return true if send data is correct or false if error */
 bool SodaqNBIoT::sendData (String data, int sock, String ip, String port) {
 
-	uint dataSended;
+	int dataSended;
 
 	String atCommand ="AT+NSOST=";
 	atCommand += sock;
@@ -78,7 +78,7 @@ bool SodaqNBIoT::sendData (String data, int sock, String ip, String port) {
 
 	dataSended = checkRespForDataSended (500, sock);
 
-	return (dataSended == (data.length()));
+	return (dataSended == ((int)data.length()));
 
 }
 
