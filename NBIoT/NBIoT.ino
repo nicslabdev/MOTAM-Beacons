@@ -54,8 +54,6 @@ void setup() {
 
 void loop() {
 
-  String message;
-
   message += "IMEI: ";
   message += imei;
   message += " Pressure: ";
