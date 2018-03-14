@@ -83,6 +83,37 @@ bool SodaqNBIoT::sendData (String data, int sock, String ip, String port) {
 }
 
 
+// Receive data and return it in string format.
+String SodaqNBIoT::receiveData (int sock, int timeOut) {
+
+	int bytesReceived;
+
+	String receivedData;
+	String receivedDataAscii;
+
+	bytesReceived = checkIfDataReceived (sock, timeOut);
+
+	if (bytesReceived != -1) {
+
+		String atCommand ="AT+NSORF=";
+		atCommand += String(sock);
+		atCommand += ",";
+		atCommand += String(bytesReceived);
+
+		sendIt(atCommand);
+
+		receivedData = checkRespForDataReceived (500, sock);
+
+	}
+
+	receivedDataAscii = hexToAscii (receivedData);
+
+	return receivedDataAscii;
+
+}
+
+
+
 
 
 
@@ -97,6 +128,11 @@ bool SodaqNBIoT::setUpUblox ( ) {
 	bool flag;							// Flag for check the connection
 
 	flag = isAlive();					// Check if there are connection with nbiot module
+
+	while (!flag) {
+		delay(500);
+		flag = isAlive();
+	}	
 
 	if (flag) {
 		flag = resetModule ();
@@ -223,6 +259,40 @@ bool SodaqNBIoT::askForImei ( ) {
 
 
 
+/* Check if there are data received from network in received buffer
+	Return number of bytes ublox received or -1 if error */
+int SodaqNBIoT::checkIfDataReceived (int sock, int timeOut) {
+
+	String response;
+	String receivedSocket="";
+	String receivedLength="";
+
+	bool ok = false;
+	unsigned long startTime = millis();	// Take time at start for time out
+
+	while ( !ok && ((millis()-startTime) <= (unsigned long) timeOut) ) {
+		response += receiveIt();
+		if (response.indexOf("+NSONMI:") >= 0) {
+			receivedSocket = response.substring((1+response.indexOf(":")),(response.indexOf(",")));
+			receivedLength = response.substring(1+response.indexOf(","));
+
+			ok = true;
+		}
+	}
+
+	if ((receivedSocket.toInt() == sock && ok)) {
+		return receivedLength.toInt();
+	} else {
+		return -1;
+	}
+
+}
+
+
+
+
+
+
 
 
 
@@ -339,6 +409,7 @@ String SodaqNBIoT::checkRespForImei ( int timeOut ) {
 			if (response.indexOf("\r\n+CGSN:") >= 0) {
 				receivedImei = response.substring((1+response.indexOf(":")));
 				receivedImei = receivedImei.substring(0,receivedImei.indexOf("\r\n"));
+				ok = true;
 			}
 		}
 	}
@@ -366,16 +437,43 @@ int SodaqNBIoT::checkRespForDataSended (int timeOut, int sock) {
 			receivedSocket = receivedSocket.substring(0,receivedSocket.indexOf(","));
 			receivedLength = response.substring((1+response.indexOf(",")));
 			receivedLength = receivedLength.substring(0,receivedLength.indexOf("\r\n"));
+			ok = true;
 		}
 	}
 
-	if ((receivedSocket.toInt() == sock)) {
+	if ((receivedSocket.toInt() == sock && ok)) {
 		return receivedLength.toInt();
 	} else {
 		return -1;
 	}
 
 }
+
+
+String SodaqNBIoT::checkRespForDataReceived (int timeOut, int sock) {
+
+	String response;
+	String dataReceived = "";
+
+	bool ok = false;
+	unsigned long startTime = millis();	// Take time at start for time out
+
+	while ( !ok && ((millis()-startTime) <= (unsigned long) timeOut) ) {
+		response += receiveIt();
+		if (response.indexOf("\r\nOK\r\n") >= 0) {	// Check all the response is received
+			dataReceived = response.substring((response.indexOf(",")));
+			for (int i = 0; i < 4; i++) {
+				dataReceived = dataReceived.substring((1+dataReceived.indexOf(",")));
+			}
+			dataReceived = dataReceived.substring(0,dataReceived.indexOf(","));
+			ok = true;
+		}
+	}
+
+	return dataReceived;
+
+}
+
 	
 
 
@@ -419,6 +517,17 @@ void SodaqNBIoT::printIt ( String text ) {
 	if (text.length() > 0) {			// If string is not empty...
 		DEBUG.println(text);			// Send by debug serial port the string
 	}
+}
+
+//Conversion from hexadecimal string to ASCII string
+String SodaqNBIoT::hexToAscii( String hex ) {
+  uint16_t len = hex.length();
+  String ascii = "";
+
+  for ( uint16_t i = 0; i < len; i += 2 )
+    ascii += (char)strtol( hex.substring( i, i+2 ).c_str(), NULL, 16 );
+    
+  return ascii;
 }
 
 

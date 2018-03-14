@@ -31,7 +31,8 @@ public:
 	String getIMEI();					// Return IMEI of card inserted in SODAQ module
 	int openSocket (int port);			// Open an UDP socket in designated port
 	bool sendData (String data, int sock, String ip, String port);	// Send data to ip and port
-String stringToHexString(String str);	// Conversion from string to hexadecimal string
+	String receiveData (int sock, int timeout); // Return received data from network
+
 private:
 	String IP;							// IP that network give to ublox module
 	String imei;						// IMEI of SIM card inserted in SODAQ module
@@ -45,18 +46,22 @@ private:
 	bool askForIp ();					// Take IP of ublox module from the network
 	bool askForImei ();					// Take IMEI's SIM from ublox module
 
+	int checkIfDataReceived (int timeOut, int sock); // Check data in received buffer
+
 	bool checkRespForOk (int timeOut);	// Check if OK is in the response from ublox module 
 	bool checkRespForReg (int timeOut);	// Check response looking for network registration
 	String checkRespForIp(int timeOut);	// Check response looking for IP given by network
 	int checkRespForSocket(int timeOut);// Check response looking for socket opened
 	String checkRespForImei(int timeOut);// Check response looking for IMEI
 	int checkRespForDataSended(int timeOut, int sock);	// Check # of bytes sent in response
+	String checkRespForDataReceived (int timeOut, int sock);// Return data received
 
 	void sendIt (String atCommand);		// Send an AT command to ublox module
 	String receiveIt ();				// Receive data sended by ublox module
 	void printIt (String text);			// Print a string by debug serial port
+	String stringToHexString(String str);	// Conversion from string to hexadecimal string
+	String hexToAscii( String hex );	//Conversion from hexadecimal string to ASCII string
 
-	
 };
 
 
