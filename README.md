@@ -1,4 +1,4 @@
-# **MOTAM - Sensors** #
+# **MOTAM - Beacons** #
 
 In this repository you can find all libraries and projects about Arduino 101 and RFduino platform for MOTAM project.
 
