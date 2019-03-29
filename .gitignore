@@ -1,2 +1,6 @@
 
 \.DS_Store
+
+nRF52/server_side/node_modules/
+
+nRF52/server_side/package-lock\.json
