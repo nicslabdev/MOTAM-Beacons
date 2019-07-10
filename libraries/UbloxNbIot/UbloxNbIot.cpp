@@ -5,18 +5,20 @@
  * Developed for MOTAM proyect. 
  * 
  *  This library manages communication with SODAQ NB-IOT SHIELD.
+ *
+ *	Compatible boards with this library: Arduino/Genuino 101.
 */
 /*********************************************************************************************/
 
-#include <SodaqNBIoTMotam.h>
+#include <UbloxNbIot.h>
 
-SodaqNBIoT::SodaqNBIoT () { 
+UbloxNbIot::UbloxNbIot () { 
 	IP = "";
 }
 
 
 // Start ublox n211 module
-bool SodaqNBIoT::begin () {
+bool UbloxNbIot::begin () {
 
 	pinMode(powerPin, OUTPUT);
 	digitalWrite(powerPin, HIGH);		// Turn the NB-IoT module on
@@ -33,18 +35,18 @@ bool SodaqNBIoT::begin () {
 
 
 // Return the IP that network assigns to the NB-IoT module
-String SodaqNBIoT::getIP() {
+String UbloxNbIot::getIP() {
 	return IP;
 }
 
 // Return the IP that network assigns to the NB-IoT module
-String SodaqNBIoT::getIMEI() {
+String UbloxNbIot::getIMEI() {
 	return imei;
 }
 
 
 // Open an UDP socket in port passed by parameter. Return the ID of socket
-int SodaqNBIoT::openSocket (int port) {
+int UbloxNbIot::openSocket (int port) {
 
 	String atCommand = "AT+NSOCR=DGRAM,17,";
 	atCommand += String (port);
@@ -59,7 +61,7 @@ int SodaqNBIoT::openSocket (int port) {
 
 /* Send data to remote IP and Port. Data must be a String
 	Return true if send data is correct or false if error */
-bool SodaqNBIoT::sendData (String data, int sock, String ip, String port) {
+bool UbloxNbIot::sendData (String data, int sock, String ip, String port) {
 
 	int dataSended;
 
@@ -84,7 +86,7 @@ bool SodaqNBIoT::sendData (String data, int sock, String ip, String port) {
 
 
 // Receive data and return it in string format.
-String SodaqNBIoT::receiveData (int sock, int timeOut) {
+String UbloxNbIot::receiveData (int sock, int timeOut) {
 
 	int bytesReceived;
 
@@ -123,7 +125,7 @@ String SodaqNBIoT::receiveData (int sock, int timeOut) {
 /* Set the NB-IoT module up sending AT commands. Register in the network and saves the IMEI 
 	of the device.
 	Return true if connection is successful or false otherwise*/
-bool SodaqNBIoT::setUpUblox ( ) {
+bool UbloxNbIot::setUpUblox ( ) {
 
 	bool flag;							// Flag for check the connection
 
@@ -157,7 +159,7 @@ bool SodaqNBIoT::setUpUblox ( ) {
 
 
 // Return true if ublox module responds to AT commands or false otherwise
-bool SodaqNBIoT::isAlive() {
+bool UbloxNbIot::isAlive() {
 
 	sendIt ("AT");						// Send AT command
 
@@ -167,7 +169,7 @@ bool SodaqNBIoT::isAlive() {
 
 
 // Reset the module. Return true if successful
-bool SodaqNBIoT::resetModule() {
+bool UbloxNbIot::resetModule() {
 
 	sendIt ("AT+NRB");					// Send AT command
 
@@ -177,7 +179,7 @@ bool SodaqNBIoT::resetModule() {
 
 
 // Configure parameters on the module for NB-IoT Connection
-bool SodaqNBIoT::confNbiotConnection () {
+bool UbloxNbIot::confNbiotConnection () {
 
 	bool flag = true;					// Flag for checking correct working of AT commands
 
@@ -205,7 +207,7 @@ bool SodaqNBIoT::confNbiotConnection () {
 
 
 // Select the operator and register SIM in the network
-bool SodaqNBIoT::networkRegistration () {
+bool UbloxNbIot::networkRegistration () {
 
 	String atCommand = "AT+COPS=1,2,\"";// Building AT Command
 	atCommand += networkOperator;		// Network operator is defined in .h
@@ -218,7 +220,7 @@ bool SodaqNBIoT::networkRegistration () {
 
 
 // Saves the IP that NB-IoT network gives to ublox module
-bool SodaqNBIoT::askForIp ( ) {
+bool UbloxNbIot::askForIp ( ) {
 
 	String receivedIp;
 
@@ -236,7 +238,7 @@ bool SodaqNBIoT::askForIp ( ) {
 }
 
 // Saves the IMEI of SIM card
-bool SodaqNBIoT::askForImei ( ) {
+bool UbloxNbIot::askForImei ( ) {
 
 	String receivedImei;
 
@@ -261,7 +263,7 @@ bool SodaqNBIoT::askForImei ( ) {
 
 /* Check if there are data received from network in received buffer
 	Return number of bytes ublox received or -1 if error */
-int SodaqNBIoT::checkIfDataReceived (int sock, int timeOut) {
+int UbloxNbIot::checkIfDataReceived (int sock, int timeOut) {
 
 	String response;
 	String receivedSocket="";
@@ -299,7 +301,7 @@ int SodaqNBIoT::checkIfDataReceived (int sock, int timeOut) {
 
 /* Check for OK in the response from ublox module
 	return true if OK is in the response or false if time out */
-bool SodaqNBIoT::checkRespForOk ( int timeOut ) {
+bool UbloxNbIot::checkRespForOk ( int timeOut ) {
 
 	String response;
 	bool ok = false;
@@ -317,7 +319,7 @@ bool SodaqNBIoT::checkRespForOk ( int timeOut ) {
 
 /* Check for network registration in the response from ublox module
 	return true if registration is done or false if time out */
-bool SodaqNBIoT::checkRespForReg ( int timeOut ) {
+bool UbloxNbIot::checkRespForReg ( int timeOut ) {
 
 	String response;
 	bool ok = false;
@@ -336,7 +338,7 @@ bool SodaqNBIoT::checkRespForReg ( int timeOut ) {
 
 /* Check for IP given by network in the response from ublox module
 	return the IP in string format */
-String SodaqNBIoT::checkRespForIp ( int timeOut ) {
+String UbloxNbIot::checkRespForIp ( int timeOut ) {
 
 	String response;
 	String receivedIp = "";
@@ -361,7 +363,7 @@ String SodaqNBIoT::checkRespForIp ( int timeOut ) {
 
 /* Check for socket opened in the response from ublox module
 	return the socket identifier or -1 if error*/
-int SodaqNBIoT::checkRespForSocket ( int timeOut ) {
+int UbloxNbIot::checkRespForSocket ( int timeOut ) {
 
 	String response;
 	String receivedSocket;
@@ -396,7 +398,7 @@ int SodaqNBIoT::checkRespForSocket ( int timeOut ) {
 
 /* Check for IMEI's card in the response from ublox module
 	Return the IMEI in string format */
-String SodaqNBIoT::checkRespForImei ( int timeOut ) {
+String UbloxNbIot::checkRespForImei ( int timeOut ) {
 
 	String response;
 	String receivedImei = "";
@@ -421,7 +423,7 @@ String SodaqNBIoT::checkRespForImei ( int timeOut ) {
 
 /* Check for confirmation of correct sending in the response from ublox module.
 	Return number of bytes ublox sent or -1 if error */
-int SodaqNBIoT::checkRespForDataSended (int timeOut, int sock) {
+int UbloxNbIot::checkRespForDataSended (int timeOut, int sock) {
 
 	String response;
 	String receivedSocket="";
@@ -450,7 +452,7 @@ int SodaqNBIoT::checkRespForDataSended (int timeOut, int sock) {
 }
 
 
-String SodaqNBIoT::checkRespForDataReceived (int timeOut, int sock) {
+String UbloxNbIot::checkRespForDataReceived (int timeOut, int sock) {
 
 	String response;
 	String dataReceived = "";
@@ -483,7 +485,7 @@ String SodaqNBIoT::checkRespForDataReceived (int timeOut, int sock) {
 
 
 // Send an AT command to ublox module
-void SodaqNBIoT::sendIt ( String atCommand ) {
+void UbloxNbIot::sendIt ( String atCommand ) {
 
 	printIt("-- "+atCommand);			// Print AT command sended
 	UBLOX.print (atCommand+"\r");		// Send AT command to ublox module
@@ -493,7 +495,7 @@ void SodaqNBIoT::sendIt ( String atCommand ) {
 
 
 // Receive the response from ublox module. Return it and print it by debug serial port
-String SodaqNBIoT::receiveIt ( ) {
+String UbloxNbIot::receiveIt ( ) {
 
 	String received;
 
@@ -512,7 +514,7 @@ String SodaqNBIoT::receiveIt ( ) {
 
 
 // Print something by DEBUG serial port
-void SodaqNBIoT::printIt ( String text ) {
+void UbloxNbIot::printIt ( String text ) {
 
 	if (text.length() > 0) {			// If string is not empty...
 		DEBUG.println(text);			// Send by debug serial port the string
@@ -520,7 +522,7 @@ void SodaqNBIoT::printIt ( String text ) {
 }
 
 //Conversion from hexadecimal string to ASCII string
-String SodaqNBIoT::hexToAscii( String hex ) {
+String UbloxNbIot::hexToAscii( String hex ) {
   uint16_t len = hex.length();
   String ascii = "";
 
@@ -533,7 +535,7 @@ String SodaqNBIoT::hexToAscii( String hex ) {
 
 
 // Conversion from string to hexadecimal string
-String SodaqNBIoT::stringToHexString (String str) {
+String UbloxNbIot::stringToHexString (String str) {
 
 	String hexString;
 

@@ -10,8 +10,8 @@
 */
 /*********************************************************************************************/
 
-#ifndef __SODAQNBIOT_H__
-#define __SODAQNBIOT_H__
+#ifndef __UBLOXNBIOT_H__
+#define __UBLOXNBIOT_H__
 
 
 #include "Arduino.h"
@@ -23,9 +23,9 @@
 #define networkOperator "21401"			// Vodafone network operator code
 
 
-class SodaqNBIoT {
+class UbloxNbIot {
 public:
-	SodaqNBIoT ();
+	UbloxNbIot ();
 	bool begin ();						// Init serial port and turn module on
 	String getIP();						// Return IP of ublox module
 	String getIMEI();					// Return IMEI of card inserted in SODAQ module
