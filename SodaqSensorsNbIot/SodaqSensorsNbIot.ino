@@ -1,10 +1,10 @@
 /*********************************************************************************************/
 /*
- * NB-IoT
+ * SODAQ Sensors NB-IoT
  * Created by Manuel Montenegro, February 22, 2018.
  * Developed for MOTAM project. 
  * 
- *  This sketch uses SODAQ NB-IoT Shield for send some data.
+ *  This sketch uses SODAQ NB-IoT Shield for send some data captured by board sensors.
  *  
  *  Compatible boards: Arduino Leonardo & Arduino/Genuino 101.
 */
@@ -13,14 +13,14 @@
 #include <Wire.h>                   // I2C library
 #include <Sodaq_LPS22HB.h>          // Temperature and pressure sensor's library
 #include <Sodaq_HTS221.h>           // Temperature and humidity sensor's library
-#include <SodaqNBIoTMotam.h>        // Library for doing MOTAM operations with SODAQ NB-IoT
+#include <UbloxNbIot.h>             // Library for doing MOTAM operations with SODAQ NB-IoT
 
 
 String SERVER_IP = "79.114.88.15";  // IP of UDP server
 String SERVER_PORT = "16666";       // Port of UDP server
 
 
-SodaqNBIoT nbiot;                   // Ublox module
+UbloxNbIot nbiot;                   // Ublox module
 Sodaq_LPS22HB barSensor;            // Barometric and temperature sensor
 Sodaq_HTS221 humiSensor;            // Humidity and temperature sensor
 
