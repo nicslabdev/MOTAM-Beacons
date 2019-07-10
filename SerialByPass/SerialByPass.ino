@@ -1,9 +1,23 @@
+/*********************************************************************************************/
+/*
+ * SerialByPass
+ * Created by Manuel Montenegro, March 21, 2019.
+ * Developed for MOTAM project. 
+ * 
+ *  This sketch stablishes a bypass connection between USB UART and module UART by serial pins,
+ *  i.e. D0 (RX) and D1 (TX) pins. 
+ * 
+ *  This is used in order to manage modules with AT commands support.
+ *  
+ *  Compatible boards: Arduino Leonardo & Arduino/Genuino 101.
+*/
+/*********************************************************************************************/
+
 #include "Arduino.h"
 
 #define USB Serial 
-#define UBLOX Serial1
+#define MODULE Serial1
 
-// Pin to turn on/off the nb-iot module
 unsigned long baud = 115200;  //start at 9600 allow the USB port to change the Baudrate
 
 
@@ -13,7 +27,7 @@ void setup()
 
   // Start communication
   USB.begin(baud);
-  UBLOX.begin(baud);
+  MODULE.begin(9600);
 
 }
 
@@ -23,12 +37,12 @@ void loop()
   while (USB.available())
   {
     uint8_t c = USB.read();
-    UBLOX.write(c);
+    MODULE.write(c);
   }
 
-  while (UBLOX.available())
+  while (MODULE.available())
   {     
-    USB.write(UBLOX.read());
+    USB.write(MODULE.read());
   }
 
 }
