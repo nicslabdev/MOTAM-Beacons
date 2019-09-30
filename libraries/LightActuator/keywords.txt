@@ -1,6 +1,0 @@
-LightActuator	KEYWORD1
-LightActuatorBasedOnGroveLED	KEYWORD1
-
-setLightOn	KEYWORD2
-setLightOff	KEYWORD2
-begin	KEYWORD2
