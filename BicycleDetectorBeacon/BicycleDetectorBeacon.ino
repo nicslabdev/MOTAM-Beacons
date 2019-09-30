@@ -15,22 +15,12 @@ uint8_t advdata[] =
   0xFF,  // Manufacturer data type
   
   // DEphisit BEacon identifier (0xDEBE)
-  0xBE,
-  0xDE,  
-  
-  // Latitude of the TrafficLightDetectorBeacon, in LE float format (not present)
-  0xEC,
-  0xDB,
-  0x12,
-  0x42,
-  
-  // Longitude of the TrafficLightDetectorBeacon, in LE float format (not present)
-  0x9D,
-  0xE4,
-  0x8F,
-  0xC0,
+  0xDE, 0xBE,  
   
   0x03,  // Type of DEphisit BEacon (0x01 -> Traffic Sign Beacon, 0x02 -> Weather Beacon, 0x03 -> Bicycle Beacon)
+  
+  // MOTAM ID Beacons
+  0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88, 0x88,
   
   // DEphisit BEacon data (different structure for each beacon type, and dynamic values)
   UNKNOWN  // Default state of the bicycle -> Unknown

@@ -1,20 +1,23 @@
 /*
-  SeatSensor.h - Interface to be implemented by sensors 
+  SeatSensor.cpp - Implementations of the sensors 
   that want to provide information about security state of 
   the car's seats.
-  Created by Jesus Rodriguez, March 24, 2015.
-  Developed for DEPHISIT project. 
+  Created by Manuel Montenegro, September 24, 2019.
+  Developed for MOTAM project. 
 */
 #ifndef SeatSensor_h
 #define SeatSensor_h
 
-#define SAFE		1
-#define NON_SAFE	0
+#define PRESENCE		  1
+#define NON_PRESENCE	0
+#define LOCK          1
+#define UNLOCK        0
 
 class SeatSensor
 {
   public:
-	virtual int getSeatState(){};
+	virtual int getPresenceState(){};
+  virtual int getLockState(){};
 };
 
 class SeatSensorBasedOnReedAndFSR : public SeatSensor
@@ -23,10 +26,11 @@ class SeatSensorBasedOnReedAndFSR : public SeatSensor
     //TODO Change FSR pin from analog pin to digital pin?
 	SeatSensorBasedOnReedAndFSR(int reedDigitalPin, int fsrAnalogPin);
 	void begin();
-	int getSeatState();
+	int getPresenceState();
+  int getLockState();
   private:
   	int _reedPin;
-	int _fsrPin;
+	  int _fsrPin;
 };  
 
 #endif

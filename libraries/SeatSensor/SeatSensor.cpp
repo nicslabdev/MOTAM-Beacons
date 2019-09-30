@@ -2,8 +2,8 @@
   SeatSensor.cpp - Implementations of the sensors 
   that want to provide information about security state of 
   the car's seats.
-  Created by Jesus Rodriguez, March 24, 2015.
-  Developed for DEPHISIT project. 
+  Created by Manuel Montenegro, September 24, 2019.
+  Developed for MOTAM project. 
 */
 #include <Arduino.h>
 
@@ -25,22 +25,35 @@ void SeatSensorBasedOnReedAndFSR::begin()
   pinMode(_reedPin, INPUT);
 }
 
-int SeatSensorBasedOnReedAndFSR::getSeatState()
+
+int SeatSensorBasedOnReedAndFSR::getPresenceState()
 {
-  int reedValue = digitalRead(_reedPin);
   int fsrValue = analogRead(_fsrPin);
   
   //Serial.println(fsrValue); //-> El valor sin presion es de 3 y con presion ha llegado hasta casi 1000
-  Serial.print("R: "); Serial.print(reedValue); Serial.print(", FSR: "); Serial.println(fsrValue);
+  Serial.print(" FSR: "); Serial.println(fsrValue);
   
-  if (reedValue == LOW && fsrValue > FSR_THRESHOLD)
+  if (fsrValue > FSR_THRESHOLD)
   {
-	return NON_SAFE;
+	return PRESENCE;
   }
   else
   {
-	return SAFE;
+	return NON_PRESENCE;
   }
-  
-  //return -1;
+}
+
+
+int SeatSensorBasedOnReedAndFSR::getLockState()
+{
+  int reedValue = digitalRead(_reedPin);
+  Serial.print(" R: "); Serial.print(reedValue);
+  if (reedValue == LOW)
+  {
+    return UNLOCK;
+  }
+  else
+  {
+    return LOCK;
+  }
 }

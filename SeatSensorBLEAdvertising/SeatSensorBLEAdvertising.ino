@@ -1,80 +1,74 @@
 /*
   SeatSensorBeacon - Beacon code for seat sensors in RFduino devices.
-  Created by Manuel Montenegro, February 06, 2018.
+  Created by Manuel Montenegro, September 24, 2018.
   Developed for MOTAM project. 
 */
 
 #include <RFduinoBLE.h>
 #include <SeatSensor.h>
 
-#define S_STATE_POS  13
+#define S_PRESENCE_POS  13
+#define S_LOCK_POS      14
 
 uint8_t advdata[] =
 {
-  0x0D,  // Length
-  0xFF,  // Manufacturer data type
+  0x0E,       // Length
+  0xFF,       // Manufacturer data type
+
+  0xDE, 0xBE, // DEphisit BEacon identifier (0xDEBE)
+
+  0x04,       // MOTAM ID 1st part (type of MOTAM Beacon)
   
-  // DEphisit BEacon identifier (0xDEBE)
-  0xBE,
-  0xDE,  
-  
-  // Latitude
-  0xEC,
-  0xDB,
-  0x12,
-  0x42,
-  
-  // Longitude
-  0x9D,
-  0xE4,
-  0x8F,
-  0xC0,
-  
-  0x04,  // Type of DEphisit BEacon (0x01 -> Traffic Sign Beacon, 0x02 -> Weather Beacon, 0x03 -> Bicycle Beacon)
-  
-  // DEphisit BEacon data (different structure for each beacon type, and dynamic values)
-  0x00  // Default state of the seat sensor -> Not Safe
+  0x00, 0x01, 0x00, 0x01, 0x03, 0x11, 0x00, 0xAA, // MOTAM ID 2nd part
+ 
+  0xFF, 0xFF  // Beacon Data
 };
 
 SeatSensorBasedOnReedAndFSR seatSensor(5, 6);
 
-uint8_t currentState, newState;
+uint8_t currentPresenceState, newPresenceState;
+uint8_t currentLockState, newLockState;
   
 void setup() {
 
   Serial.begin(9600);
   
   seatSensor.begin();
-  currentState = seatSensor.getSeatState();
   
-  advdata[S_STATE_POS] = currentState;
+  currentPresenceState = seatSensor.getPresenceState();
+  currentLockState = seatSensor.getLockState();
+  
+  advdata[S_PRESENCE_POS] = currentPresenceState;
+  advdata[S_LOCK_POS] = currentLockState;
+  
   RFduinoBLE_advdata = advdata;
   RFduinoBLE_advdata_len = sizeof(advdata);
-  //Serial.print("advdata=");for (int i=0;i<sizeof(advdata);i++){Serial.print(advdata[i], HEX); Serial.print(" ");}Serial.println();
+  // Serial.print("advdata=");for (int i=0;i<sizeof(advdata);i++){Serial.print(advdata[i], HEX); Serial.print(" ");}Serial.println();
   
   RFduinoBLE.advertisementInterval = 20;
   RFduinoBLE.txPowerLevel = +4;
-  
+
+  RFduinoBLE.begin();
 }
 
 void loop() {
   
-  newState = seatSensor.getSeatState();
+  newPresenceState = seatSensor.getPresenceState();
+  newLockState = seatSensor.getLockState();
 
- 
-  if (currentState != newState)
+  if (currentPresenceState != newPresenceState || currentLockState != newLockState)
   {
     RFduinoBLE.end();
     
-    advdata[S_STATE_POS] = newState;
+    advdata[S_PRESENCE_POS] = newPresenceState;
+    advdata[S_LOCK_POS] = newLockState;
     //RFduinoBLE_advdata = advdata;
     //RFduinoBLE_advdata_len = sizeof(advdata);
 
-    if (newState == 0) {
-      RFduinoBLE.begin();
-    }
+    RFduinoBLE.begin();
     
-    currentState = newState;
+    currentPresenceState = newPresenceState;
+    currentLockState = newLockState;
   }
   
   /*switch (newState)

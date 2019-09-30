@@ -2,12 +2,7 @@
 
 Here you can find all the beacons development of MOTAM infrastructure. The different types of beacons have been developed on different hardware platforms according to the different needs and requirements of each of them.
 
-## **nRF52** ##
-
-nRF52 platform provides a good way of explore Bluetooth 5 possibilities such long range coverage and extended advertisements and this allows for developing new security schemas and solves some limitations like little BLE coverage.
-
-More information inside *nRF52* folder.
-
+Some of this sketches are developed for rfDuino platform and the others for Arduino 101 platform.
 
 ## *libraries* folder ##
 
